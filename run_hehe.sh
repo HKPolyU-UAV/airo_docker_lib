@@ -8,10 +8,12 @@ echo "GOT GPU? y/n:"
 read got_gpu
 
 gpu_enabled="--gpus all"
+
 if [ "$got_gpu" == "y" ] || [ "$got_gpu" == "Y" ]; then
-    echo ""
+    image="airo_noetic_hehe:${image}-gpu"
 else
     gpu_enabled=""
+    image="airo_noetic_hehe:${image}-nogpu"
 fi
 
 if [ "$(docker images -q $image 2> /dev/null)" == "" ]; then

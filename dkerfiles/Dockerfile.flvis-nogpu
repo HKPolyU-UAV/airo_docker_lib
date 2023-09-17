@@ -1,0 +1,15 @@
+FROM pattylo/airo_ros_noetic:nogpu-nopkg
+ENV DEBIAN_FRONTEND=noninteractive
+ARG HOME=/root
+
+# FLVIS
+WORKDIR $HOME
+RUN apt update
+RUN sudo apt-get install libsuitesparse-dev -y
+RUN mkdir -p vio_ws/src && cd ~/vio_ws/src && \
+    git clone -b noetic https://github.com/HKPolyU-UAV/FLVIS.git && \
+    cd ~/vio_ws/src/FLVIS/3rdPartLib && \
+    sudo ./install3rdPartLib.sh
+
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/vio_ws/;\
+    catkin_make'

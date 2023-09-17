@@ -16,12 +16,13 @@ For ```{pkg arg}```, please refer to below.
 
 ## pkg arg
 ### frequently used
-- ```e2es```, [ref]() -> the E2ES MAV simulation package
-- ```flvis```, [ref]() -> the FLVIS VIO package
-- ```ctrl```, [ref]() -> the controller interface for multiple controllers(MPC, SMC, Backstepping included)
-- ```bluerov2```, [ref]() -> the bluerov2 simulation package with MPC controller
-- ```realsense2```, [ref]() -> the ros wrapper for realsense cameras
-- ```yolo_ros```, [ref]() -> a ros wrapper for yolov4 and yolov8
+- [e2es]() (tested) -> the E2ES MAV simulation package
+- [flvis]() (tested) -> the FLVIS VIO package
+- [ctrl]() (tested)-> the controller interface for multiple controllers(MPC, SMC, Backstepping included)
+- [bluerov2]() (tested) -> the bluerov2 simulation package with MPC controller
+- [ros_yolo]() (tested) -> a ros wrapper for yolov4 and yolov8
+![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+![example branch parameter](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=feature-1)
 
 ### other pkgs
 - ```ros_vicon_sdk```, [ref]() -> a ros wrapper for VICON SDK

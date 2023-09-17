@@ -20,4 +20,4 @@ echo "BUILDING $final_name DOCKER IMAGE."
 
 docker build \
     -f dkerfiles/Dockerfile.$distro \
-    -t airo_noetic_lala:$final_name .
+    -t airo_noetic_hehe:$final_name .

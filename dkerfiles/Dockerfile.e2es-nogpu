@@ -1,0 +1,29 @@
+FROM pattylo/airo_ros_noetic:nogpu-nopkg
+ENV DEBIAN_FRONTEND=noninteractive
+ARG HOME=/root
+
+# E2ES
+WORKDIR $HOME
+RUN sudo apt-get -y install ros-noetic-mavros \
+    ros-noetic-mavros-extras \
+    ros-noetic-mavros-msgs \
+    libncurses5-dev \
+    python3-pip \
+    libgstreamer1.0-dev \
+    python-jinja2 \
+    python3-pip \
+    python3-testresources \
+    libignition-math4 \
+    libgazebo11-dev 
+    
+RUN pip3 install --user empy toml numpy packaging jinja2
+RUN pip3 install numpy toml empy packaging
+RUN wget https://raw.githubusercontent.com/mavlink/mavros/master/mavros/scripts/install_geographiclib_datasets.sh
+RUN sudo bash ./install_geographiclib_datasets.sh
+
+RUN mkdir -p catkin_ws/src && cd ~/catkin_ws/src && \
+    git clone https://github.com/HKPolyU-UAV/E2ES.git && \
+    cd ~/catkin_ws/src/E2ES/3rdPartLib && \
+    sudo ./install3rdPartLib.sh
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws/;\
+    catkin_make'
