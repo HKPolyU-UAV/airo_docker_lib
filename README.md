@@ -19,9 +19,9 @@ For ```{pkg arg}```, please refer to below.
 
 
 ### other pkgs
-- ```ros_vicon_sdk```, [ref]() -> a ros wrapper for VICON SDK
-- ```alan```, [ref]() -> a non-robocentric landing framework
-- ```alan_g```, [ref]() -> a non-robocentric landing framework simulation platform
-- ```fntsmc```, [ref]() -> a Fast Nonsingular Terminal Sliding Mode Control for quadrotor
+- [ros_vicon_sdk](!tested) -> a ros wrapper for VICON SDK
+- [alan](!tested) -> a non-robocentric landing framework
+- [alan_g](!tested) -> a non-robocentric landing framework simulation platform
+- [fntsmc](https://github.com/HKPolyU-UAV/fntsmc) (tested) -> a Fast Nonsingular Terminal Sliding Mode Control for quadrotor
 
 - hope there will be more software here in the near future...
