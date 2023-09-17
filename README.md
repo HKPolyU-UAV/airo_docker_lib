@@ -15,14 +15,12 @@ This repo contains docker images of the projects of our lab. We have conducted t
 For ```{pkg arg}```, please refer to below.
 
 ## pkg arg
-### frequently used
-- [e2es]() (tested) -> the E2ES MAV simulation package
-- [flvis]() (tested) -> the FLVIS VIO package
-- [ctrl]() (tested)-> the controller interface for multiple controllers(MPC, SMC, Backstepping included)
-- [bluerov2]() (tested) -> the bluerov2 simulation package with MPC controller
-- [ros_yolo]() (tested) -> a ros wrapper for yolov4 and yolov8
-![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
-![example branch parameter](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=feature-1)
+- [e2es](https://github.com/HKPolyU-UAV/E2ES) (tested) -> the E2ES MAV simulation package
+- [flvis](https://github.com/HKPolyU-UAV/FLVIS) (tested) -> the FLVIS VIO package
+- [ctrl](https://github.com/HKPolyU-UAV/airo_control_interface) (tested)-> the controller interface for multiple controllers(MPC, SMC, Backstepping included)
+- [bluerov2](https://github.com/HKPolyU-UAV/bluerov2) (tested) -> the bluerov2 simulation package with MPC controller
+- [ros_yolo](https://github.com/HKPolyU-UAV/yolo_ros_plugin) (!tested) -> a ros wrapper for yolov4 and yolov8
+
 
 ### other pkgs
 - ```ros_vicon_sdk```, [ref]() -> a ros wrapper for VICON SDK
