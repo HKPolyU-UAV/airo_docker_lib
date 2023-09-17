@@ -5,12 +5,16 @@ This repo contains docker images of the projects of our lab. We have conducted t
 - Please refer to this page for preinstallation [here](https://github.com/HKPolyU-UAV/docker_practice).
 
 ## Usage
-- Just simply do ```./build_hehe.sh {pkg arg}``` to build.
-- Then simply do ```./run_hehe.sh {pkg arg}``` to run.
+- Build Image. Just simply do 
+
+    ```./build_hehe.sh {pkg arg}```
+- Run Image and generate container. Simply do 
+    
+    ```./run_hehe.sh {pkg arg}``` 
 
 For ```{pkg arg}```, please refer to below.
 
-## pkg arg
+## pkg arg:
 - [e2es](https://github.com/HKPolyU-UAV/E2ES) (tested) -> the E2ES MAV simulation package
 - [flvis](https://github.com/HKPolyU-UAV/FLVIS) (tested) -> the FLVIS VIO package
 - [ctrl](https://github.com/HKPolyU-UAV/airo_control_interface) (tested)-> the controller interface for multiple controllers(MPC, SMC, Backstepping included)
