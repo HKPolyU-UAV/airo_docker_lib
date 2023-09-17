@@ -26,15 +26,14 @@ RUN git clone https://github.com/acados/acados.git && \
 # RUN pip install importlib-metadata
 RUN pip install -e ~/acados/interfaces/acados_template
 
+RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib"' >> ~/.bashrc && \
+    echo 'export ACADOS_SOURCE_DIR="/root/acados"' >> ~/.bashrc
+
 RUN sudo apt-get install -y ros-noetic-geodesy
 RUN mkdir -p ~/catkin_ws/src && \
     cd ~/catkin_ws/src && \
     git clone --branch noetic https://github.com/arturmiller/uuv_simulator.git
 
-RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib"' >> ~/.bashrc && \
-    echo 'export ACADOS_SOURCE_DIR="/root/acados"' >> ~/.bashrc
-
-RUN echo "lala"
 RUN cd ~/catkin_ws/src && \
     # git clone https://github.com/HKPolyU-UAV/bluerov2.git && \
     git clone --branch docker https://github.com/HKPolyU-UAV/bluerov2.git && \
