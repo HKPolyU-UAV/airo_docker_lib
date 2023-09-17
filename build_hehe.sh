@@ -10,9 +10,12 @@ read got_gpu
 if [ "$got_gpu" == "y" ] || [ "$got_gpu" == "Y" ]; then
     distro="${distro}-gpu"
     final_name="${final_name}-gpu"
-else
+elif [ "$got_gpu" == "n" ] || [ "$got_gpu" == "N" ]; then
     distro="${distro}-nogpu"
     final_name="${final_name}-nogpu"
+else
+    echo "PLEASE CHECK YOUR INPUT!"
+    exit 1
 fi
 
 

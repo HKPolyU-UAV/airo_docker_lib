@@ -6,10 +6,12 @@ ARG HOME=/root
 WORKDIR $HOME
 RUN apt update
 RUN sudo apt-get install libsuitesparse-dev -y
-RUN mkdir -p vio_ws/src && cd ~/vio_ws/src && \
+RUN mkdir -p catkin_ws/src && cd ~/catkin_ws/src && \
     git clone -b noetic https://github.com/HKPolyU-UAV/FLVIS.git && \
-    cd ~/vio_ws/src/FLVIS/3rdPartLib && \
+    cd ~/catkin_ws/src/FLVIS/3rdPartLib && \
     sudo ./install3rdPartLib.sh
 
-RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/vio_ws/;\
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws/;\
     catkin_make'
+
+RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc

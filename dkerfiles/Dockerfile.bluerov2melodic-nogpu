@@ -1,0 +1,96 @@
+FROM osrf/ros:melodic-desktop-full
+ENV DEBIAN_FRONTEND=noninteractive
+ARG HOME=/root
+
+# Pre-requisite
+RUN sudo apt-get update && sudo apt-get -y upgrade 
+RUN sudo apt-get -y install tmux curl wget curl net-tools git nano
+
+# ROS
+RUN sudo apt-get update
+RUN sudo apt-get -y install ros-melodic-desktop-full
+RUN rosdep update
+RUN echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+# RUN source /root/.bashrc
+
+# SSH
+RUN sudo apt-get update
+RUN sudo apt-get -y install openssh-server
+# RUN echo -e "0000\n0000" | passwd root
+RUN sudo echo "PermitRootLogin Yes" >> /etc/ssh/sshd_config
+RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port 6666 >> /etc/ssh/sshd_config
+RUN sed -i '4i\service ssh start' /ros_entrypoint.sh 
+
+# NGROK
+WORKDIR /
+RUN curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null && echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list && sudo apt update && sudo apt install ngrok
+RUN touch ngrok.sh
+RUN echo "cd /usr/local/bin">> /ngrok.sh
+RUN echo "./ngrok tcp 6666">> /ngrok.sh
+RUN chmod +x ngrok.sh
+
+# GIT Update
+RUN sudo apt install software-properties-common -y
+RUN sudo add-apt-repository -y ppa:git-core/ppa
+RUN sudo apt update
+RUN sudo apt install git -y
+
+# VRPN
+RUN sudo apt-get update && sudo apt-get -y install ros-melodic-vrpn ros-melodic-vrpn-client-ros
+
+# bluerov2
+
+RUN sudo add-apt-repository ppa:deadsnakes/ppa
+RUN sudo apt update
+RUN sudo apt install -y python3.7
+
+RUN apt-get install -y python3-pip
+RUN python3.7 -m pip install pip
+
+RUN python3.7 -m pip install --upgrade pip
+RUN python3.7 -m pip install numpy matplotlib scipy future-fstrings casadi>=3.5.1 setuptools
+RUN sudo apt-get install -y python3.7-tk
+
+
+WORKDIR $HOME
+RUN git clone https://github.com/acados/acados.git && \
+    cd ~/acados && git checkout 568e46c && \
+    git submodule update --recursive --init && \
+    mkdir build && cd build && \
+    cmake -DACADOS_WITH_QPOASES=ON -DACADOS_WITH_OSQP=OFF/ON -DACADOS_INSTALL_DIR=~/acados .. && \
+    sudo make install -j4
+
+RUN python3.7 -m pip install importlib-metadata
+RUN python3.7 -m pip install -e ~/acados/interfaces/acados_template
+
+RUN sudo apt-get install -y ros-melodic-geodesy
+RUN sudo apt install -y ros-melodic-uuv-simulator
+
+RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib"' >> ~/.bashrc && \
+    echo 'export ACADOS_SOURCE_DIR="/root/acados"' >> ~/.bashrc
+
+RUN echo "lala" >> ~/.bashrc
+RUN mkdir -p ~/catkin_ws/src && \
+    cd ~/catkin_ws/src && \
+    git clone --branch docker https://github.com/HKPolyU-UAV/bluerov2.git && \
+    cd ~/catkin_ws/src/bluerov2 
+
+RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib" && \
+    export ACADOS_SOURCE_DIR="/root/acados" && \
+    cd ~/catkin_ws/src/bluerov2/bluerov2_dobmpc/scripts && \
+    yes | python3.7 generate_c_code.py 
+
+RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib" && \
+    export ACADOS_SOURCE_DIR="/root/acados" && \
+    cd ~/catkin_ws/src/bluerov2/bluerov2_mpc/scripts && \
+    yes | python3.7 generate_c_code.py
+
+RUN /bin/bash -c '. /opt/ros/melodic/setup.bash; cd ~/catkin_ws/;\
+    catkin_make'
+
+# Other pkgs
+RUN sudo apt-get update && sudo apt-get -y install gedit
+
+RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+
+WORKDIR $HOME

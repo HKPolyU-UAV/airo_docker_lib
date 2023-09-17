@@ -11,9 +11,12 @@ gpu_enabled="--gpus all"
 
 if [ "$got_gpu" == "y" ] || [ "$got_gpu" == "Y" ]; then
     image="airo_noetic_hehe:${image}-gpu"
-else
+elif [ "$got_gpu" == "n" ] || [ "$got_gpu" == "N" ]; then
     gpu_enabled=""
     image="airo_noetic_hehe:${image}-nogpu"
+else
+    echo "PLEASE CHECK YOUR INPUT!"
+    exit 1
 fi
 
 if [ "$(docker images -q $image 2> /dev/null)" == "" ]; then
@@ -22,8 +25,6 @@ if [ "$(docker images -q $image 2> /dev/null)" == "" ]; then
     echo ""
     exit 1
 else
-    echo ""
-    echo "NOW RUNNING IMAGE -> CONTAINER"
     echo ""
 fi
 

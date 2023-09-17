@@ -27,3 +27,5 @@ RUN mkdir -p catkin_ws/src && cd ~/catkin_ws/src && \
     sudo ./install3rdPartLib.sh
 RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws/;\
     catkin_make'
+
+RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
