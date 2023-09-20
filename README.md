@@ -19,7 +19,7 @@ For ```{pkg arg}```, please refer to below.
 - [flvis](https://github.com/HKPolyU-UAV/FLVIS) (tested) -> the FLVIS VIO package
 - [ctrl](https://github.com/HKPolyU-UAV/airo_control_interface) (tested)-> the controller interface for multiple controllers(MPC, SMC, Backstepping included)
 - [bluerov2](https://github.com/HKPolyU-UAV/bluerov2) (tested) -> the bluerov2 simulation package with MPC controller
-- [ros_yolo](https://github.com/HKPolyU-UAV/yolo_ros_plugin) (!tested) -> a ros wrapper for yolov4 and yolov8
+- [ros_yolo](https://github.com/HKPolyU-UAV/yolo_ros_plugin) (X tested) -> a ros wrapper for yolov4 and yolov8
 
 
 ### other pkgs
