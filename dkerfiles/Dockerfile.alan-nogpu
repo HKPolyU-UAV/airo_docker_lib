@@ -1,0 +1,42 @@
+FROM pattylo/airo_ros_noetic:nogpu-nopkg
+ENV DEBIAN_FRONTEND=noninteractive
+ARG HOME=/root
+
+
+# alan
+
+WORKDIR $HOME
+RUN sudo apt install -y ros-noetic-sophus
+RUN sudo ln -sf /usr/include/eigen3/Eigen /usr/include/Eigen
+RUN mkdir -p ~/catkin_ws/src && \
+    cd ~/catkin_ws/src && \
+    git clone https://github.com/HKPolyU-UAV/alan.git
+
+RUN cd ~/catkin_ws && mkdir alan_third_party && \
+    cd ~/catkin_ws/alan_third_party && \
+    git clone --recursive https://github.com/pattylo/osqp.git && \
+    git clone https://github.com/pattylo/osqp-eigen.git && \
+    git clone https://github.com/catkin/catkin_simple.git && \
+    git clone https://github.com/sikang/DecompUtil.git
+
+RUN cd ~/catkin_ws/alan_third_party/osqp && \
+    mkdir build && cd build && cmake .. && make -j8 && sudo make install
+
+RUN cd ~/catkin_ws/alan_third_party/osqp-eigen && \
+    mkdir build && cd build && cmake .. && make -j8 && sudo make install
+
+RUN cd ~/catkin_ws/alan_third_party/catkin_simple && \
+    mkdir build && cd build && \
+    /bin/bash -c '. /opt/ros/noetic/setup.bash; cmake ..' && \ 
+    sudo make install
+
+RUN cd ~/catkin_ws/alan_third_party/DecompUtil && \
+    mkdir build && cd build && cmake .. && make -j8 && sudo make install
+
+
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws/;\
+    catkin_make'
+
+RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+
+WORKDIR $HOME

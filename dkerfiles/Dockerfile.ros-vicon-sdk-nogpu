@@ -1,0 +1,21 @@
+FROM pattylo/airo_ros_noetic:nogpu-nopkg
+ENV DEBIAN_FRONTEND=noninteractive
+ARG HOME=/root
+
+
+# ros-vicon-sdk
+
+WORKDIR $HOME
+
+RUN mkdir -p ~/catkin_ws/src && \
+    cd ~/catkin_ws/src && \
+    git clone https://github.com/HKPolyU-UAV/ros_vicon_sdk.git
+
+RUN sudo ln -sf /usr/include/eigen3/Eigen /usr/include/Eigen
+
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws/;\
+    catkin_make'
+
+RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+
+WORKDIR $HOME
