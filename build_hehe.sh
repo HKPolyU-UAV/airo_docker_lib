@@ -18,7 +18,6 @@ else
     exit 1
 fi
 
-
 echo "BUILDING $final_name DOCKER IMAGE."
 
 docker build \
