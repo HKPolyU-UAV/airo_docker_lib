@@ -13,9 +13,6 @@ if [ "$got_gpu" == "y" ] || [ "$got_gpu" == "Y" ]; then
 elif [ "$got_gpu" == "n" ] || [ "$got_gpu" == "N" ]; then
     distro="${distro}-nogpu"
     final_name="${final_name}-nogpu"
-elif [ "$got_gpu" == "vim" ]; then
-    distro="${distro}"
-    final_name="vim"
 else
     echo "PLEASE CHECK YOUR INPUT!"
     exit 1

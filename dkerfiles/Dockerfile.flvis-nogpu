@@ -15,3 +15,30 @@ RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws/;\
     catkin_make'
 
 RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+
+# REALSENSE
+RUN sudo mkdir -p /etc/apt/keyrings
+RUN curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | sudo tee /etc/apt/keyrings/librealsense.pgp > /dev/null
+RUN echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" | \
+    sudo tee /etc/apt/sources.list.d/librealsense.list
+RUN sudo apt-get update
+RUN sudo apt-get install librealsense2-dkms -y
+RUN sudo apt-get install librealsense2-utils -y
+RUN sudo apt-get install librealsense2-dev -y
+RUN sudo apt-get install librealsense2-dbg -y
+
+RUN mkdir -p ~/camera_ws/src && cd ~/camera_ws/src/ && \
+    git clone https://github.com/IntelRealSense/realsense-ros.git && \
+    cd realsense-ros/ && \
+    git checkout `git tag | sort -V | grep -P "^2.\d+\.\d+" | tail -1`
+RUN sudo apt-get install ros-noetic-ddynamic-reconfigure -y
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws/src;\
+    catkin_init_workspace'
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws;\
+    catkin_make clean'
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws;\
+    catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release'
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws;\
+    catkin_make install'
+
+RUN echo "source ~/camera_ws/devel/setup.bash" >> ~/.bashrc
