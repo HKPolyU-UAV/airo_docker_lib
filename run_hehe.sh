@@ -14,6 +14,9 @@ if [ "$got_gpu" == "y" ] || [ "$got_gpu" == "Y" ]; then
 elif [ "$got_gpu" == "n" ] || [ "$got_gpu" == "N" ]; then
     gpu_enabled=""
     image="airo_noetic_hehe:${image}-nogpu"
+elif [ "$got_gpu" == "vim" ]; then
+    gpu_enabled=""
+    image="airo_noetic_hehe:${image}"
 else
     echo "PLEASE CHECK YOUR INPUT!"
     exit 1
