@@ -1,0 +1,5 @@
+FROM pattylo/airo_noetic_vim:latest
+ENV DEBIAN_FRONTEND=noninteractive
+ARG HOME=/root
+
+WORKDIR $HOME
