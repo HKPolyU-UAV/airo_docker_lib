@@ -15,7 +15,7 @@ RUN git clone https://github.com/acados/acados.git && \
 
 RUN mkdir -p ~/airo_control_interface_ws/src && \
     cd ~/airo_control_interface_ws/src && \
-    git clone https://github.com/HKPolyU-UAV/airo_control_interface.git
+    git clone https://github.com/pattylo/airo_control_interface.git
 
 RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/airo_control_interface_ws/;\
     catkin_make'
