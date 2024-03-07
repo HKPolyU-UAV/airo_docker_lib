@@ -27,7 +27,7 @@ RUN sudo apt-get update && sudo apt-get -y install ros-noetic-vrpn ros-noetic-vr
 # SSH
 RUN sudo apt-get update
 RUN sudo apt-get -y install openssh-server
-# RUN echo -e "0000\n0000" | passwd root
+RUN echo 'root:0000' | chpasswd
 RUN sudo echo "PermitRootLogin Yes" >> /etc/ssh/sshd_config
 RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port 6666 >> /etc/ssh/sshd_config
 RUN sed -i '4i\service ssh start' /ros_entrypoint.sh 
