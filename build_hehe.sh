@@ -20,6 +20,6 @@ fi
 
 echo "BUILDING $final_name DOCKER IMAGE."
 
-docker build \
+docker build --memory="4096m" \
     -f dkerfiles/Dockerfile.$distro \
     -t airo_noetic_hehe:$final_name .
