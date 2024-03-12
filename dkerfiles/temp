@@ -96,56 +96,28 @@ RUN echo "source ~/airo_trajectory_ws/devel/setup.bash" >> ~/.bashrc
 
 WORKDIR /
 RUN touch ros_entrypoint.sh
-RUN echo "#!/bin/bash" >> ros_entrypoint.sh && \
-    echo "set -e" >> ros_entrypoint.sh && \
-    echo "service ssh start" >> ros_entrypoint.sh && \
-    echo "source \"/opt/ros/noetic/setup.bash\"" >> ros_entrypoint.sh && \
-    echo "exec \"\$@\"" >> ros_entrypoint.sh && \
-    chmod +x ros_entrypoint.sh
+RUN echo "#!/bin/bash" >> ros_entrypoint.sh
+RUN echo "set -e" >> ros_entrypoint.sh
+RUN echo "service ssh start" >> ros_entrypoint.sh
+RUN echo "source \"/opt/ros/noetic/setup.bash\"" >> ros_entrypoint.sh
+RUN echo "exec \"\$@\"" >> ros_entrypoint.sh
+RUN chmod +x ros_entrypoint.sh
 
 # REALSENSE
 WORKDIR $HOME
-RUN git clone https://github.com/pattylo/librealsense.git
+RUN git clone https://github.com/pattylo/librealsense-personal-use.git
 
-WORKDIR $HOME/librealsense/
+WORKDIR $HOME/librealsense-personal-use/
 RUN mkdir build
 
-WORKDIR $HOME/librealsense/build
+WORKDIR $HOME/librealsense-personal-use/build
 RUN cmake ../ -DFORCE_RSUSB_BACKEND=ON -DBUILD_PYTHON_BINDINGS:bool=true -DPYTHON_EXECUTABLE=/usr/bin/python3 -DBUILD_EXAMPLES=true  
 RUN make -j6
 RUN make install
 
-WORKDIR $HOME/librealsense/scripts/
+WORKDIR $HOME/librealsense-personal-use/scripts/
 RUN ./setup_udev_rules.sh
 
-# REALSENSE-ROS
-RUN mkdir -p ~/camera_ws/src && cd ~/camera_ws/src/ && \
-    git clone https://github.com/IntelRealSense/realsense-ros.git && \
-    cd realsense-ros/ && \
-    git checkout `git tag | sort -V | grep -P "^2.\d+\.\d+" | tail -1`
-RUN sudo apt-get install ros-noetic-ddynamic-reconfigure -y
-RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws/src;\
-    catkin_init_workspace'
-RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws;\
-    catkin_make clean'
-RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws;\
-    catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release'
-RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws;\
-    catkin_make install'
-
-# FLVIS
-WORKDIR $HOME
-RUN apt-get update && apt-get upgrade -y 
-RUN sudo apt-get install libsuitesparse-dev -y
-RUN mkdir -p camera_ws/src && cd ~/camera_ws/src && \
-    git clone -b noetic https://github.com/HKPolyU-UAV/FLVIS.git && \
-    cd ~/camera_ws/src/FLVIS/3rdPartLib && \
-    sudo ./install3rdPartLib.sh
-
-RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws/;\
-    catkin_make'
-
-RUN echo "source ~/camera_ws/devel/setup.bash" >> ~/.bashrc
 
 
 WORKDIR $HOME
