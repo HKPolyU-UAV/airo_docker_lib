@@ -1,0 +1,3 @@
+FROM pattylo/airo_ros_noetic:gpu-bluerov2
+ENV DEBIAN_FRONTEND=noninteractive
+ARG HOME=/root
