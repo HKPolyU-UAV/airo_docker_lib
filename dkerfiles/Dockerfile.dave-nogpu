@@ -33,23 +33,22 @@ RUN sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) 
         ros-${DIST}-teleop-twist-keyboard ros-${DIST}-tf2-geometry-msgs ros-${DIST}-tf2-tools \
         ros-${DIST}-urdfdom-py ros-${DIST}-velodyne-gazebo-plugins ros-${DIST}-velodyne-simulator ros-${DIST}-xacro
 
-RUN mkdir -p ~/uuv_ws/src && \
+RUN apt-get update && apt-get upgrade -y && \
+    mkdir -p ~/uuv_ws/src && \
     cd ~/uuv_ws/src && \
-    git clone https://github.com/Field-Robotics-Lab/dave.git && \
-    git clone https://github.com/Field-Robotics-Lab/dockwater.git && \ 
-    git clone -b nps_dev https://github.com/Field-Robotics-Lab/ds_msgs.git && \
-    git clone -b nps_dev https://github.com/Field-Robotics-Lab/ds_sim.git && \
-    git clone https://github.com/uuvsimulator/eca_a9.git && \
-    git clone https://github.com/uuvsimulator/rexrov2.git && \
-    git clone https://github.com/Field-Robotics-Lab/uuv_manipulators.git && \
-    git clone https://github.com/Field-Robotics-Lab/uuv_simulator.git && \
+    git clone https://github.com/HKPolyU-UAV/dave_sim.git 
+    
+RUN cd ~/uuv_ws/src/dave_sim && \
+    git submodule update --init --recursive && \
     /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/uuv_ws/;\
     catkin_make'
 
-RUN apt-get update && apt-get upgrade -y && \
-    cd catkin_ws && rm -r devel/ build/ && \
-    /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws/;\
-    catkin_make'
+RUN echo "source ~/uuv_ws/devel/setup.bash" >> ~/.bashrc
+
+# RUN apt-get update && apt-get upgrade -y && \
+#     cd catkin_ws && rm -r devel/ build/ && \
+#     /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws/;\
+#     catkin_make'
 
 
 
