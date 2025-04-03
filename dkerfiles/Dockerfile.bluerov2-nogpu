@@ -4,16 +4,13 @@ ARG HOME=/root
 
 
 # bluerov2
-
+RUN echo "hi"
 RUN sudo add-apt-repository ppa:deadsnakes/ppa
 RUN sudo apt update
-RUN sudo apt install -y python3.7
 
 RUN apt-get install -y python3-pip
 
-RUN pip3 install numpy matplotlib scipy future-fstrings casadi>=3.5.1 setuptools
-RUN sudo apt-get install -y python3.7-tk
-
+RUN pip3 install numpy matplotlib scipy future-fstrings casadi>=3.5.1 setuptools>=61
 
 WORKDIR $HOME
 RUN git clone https://github.com/acados/acados.git && \
@@ -23,8 +20,12 @@ RUN git clone https://github.com/acados/acados.git && \
     cmake -DACADOS_WITH_QPOASES=ON -DACADOS_WITH_OSQP=OFF/ON -DACADOS_INSTALL_DIR=~/acados .. && \
     sudo make install -j4
 
-# RUN pip install importlib-metadata
+    
+RUN pip install importlib-metadata
+RUN pip install --upgrade setuptools
+
 RUN pip install -e ~/acados/interfaces/acados_template
+
 
 RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib"' >> ~/.bashrc && \
     echo 'export ACADOS_SOURCE_DIR="/root/acados"' >> ~/.bashrc
@@ -41,6 +42,19 @@ RUN cd ~/catkin_ws/src && \
     cd ~/catkin_ws/src/bluerov2 && \
     git submodule update --init --recursive 
 
+RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib" && \
+    export ACADOS_SOURCE_DIR="/root/acados" && \
+    export PYTHONPATH=$PYTHONPATH:/root/acados/interfaces/acados_template && \
+    cd ~/catkin_ws/src/bluerov2/bluerov2_dobmpc/scripts && \
+    yes | python3 generate_c_code.py 
+
+RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib" && \
+    export ACADOS_SOURCE_DIR="/root/acados" && \
+    export PYTHONPATH=$PYTHONPATH:/root/acados/interfaces/acados_template && \
+    cd ~/catkin_ws/src/bluerov2/bluerov2_mpc/scripts && \
+    yes | python3 generate_c_code.py
+
+
 # REALSENSE
 RUN sudo mkdir -p /etc/apt/keyrings
 RUN curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | sudo tee /etc/apt/keyrings/librealsense.pgp > /dev/null
@@ -52,34 +66,12 @@ RUN sudo apt-get update && \
     sudo apt-get install librealsense2-dev -y && \
     sudo apt-get install librealsense2-dbg -y 
 
-# RUN mkdir -p ~/camera_ws/src && cd ~/camera_ws/src/ && \
-#     git clone https://github.com/IntelRealSense/realsense-ros.git && \
-#     cd realsense-ros/ && \
-#     git checkout `git tag | sort -V | grep -P "^2.\d+\.\d+" | tail -1`
-# RUN sudo apt-get install ros-noetic-ddynamic-reconfigure -y && \
-#     /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws/src;\
-#     catkin_init_workspace' && \
-#     /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws;\
-#     catkin_make clean' && \
-#     /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws;\
-#     catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release' && \
-#     /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/camera_ws;\
-#     catkin_make install'
-
-RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib" && \
-    export ACADOS_SOURCE_DIR="/root/acados" && \
-    cd ~/catkin_ws/src/bluerov2/bluerov2_dobmpc/scripts && \
-    yes | python3 generate_c_code.py 
-
-RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib" && \
-    export ACADOS_SOURCE_DIR="/root/acados" && \
-    cd ~/catkin_ws/src/bluerov2/bluerov2_mpc/scripts && \
-    yes | python3 generate_c_code.py
-
 RUN sudo ln -s /usr/include/eigen3/Eigen /usr/include/Eigen && \
     /bin/bash -c '. /opt/ros/noetic/setup.bash; cd ~/catkin_ws/;\
     catkin_make'
 
+RUN echo "PYTHONPATH=$PYTHONPATH:/root/acados/interfaces/acados_template" >> ~/.bashrc
 RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
+
 
 WORKDIR $HOME
