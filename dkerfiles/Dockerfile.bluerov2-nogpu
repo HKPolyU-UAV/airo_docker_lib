@@ -4,7 +4,7 @@ ARG HOME=/root
 
 
 # bluerov2
-RUN echo "hi"
+
 RUN sudo add-apt-repository ppa:deadsnakes/ppa
 RUN sudo apt update
 
